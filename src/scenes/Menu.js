@@ -1,7 +1,8 @@
 
 class Menu extends Phaser.Scene {
-    constructor() {
+    constructor(highscore) {
         super("menuScene");
+        this.highscore2 = highscore;
     }
 
     preload() {
@@ -12,6 +13,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_explosion_3', 'assets/explosion3.mp3');
         this.load.audio('sfx_explosion_4', 'assets/explosion4.mp3');
         this.load.audio('sfx_rocket', 'assets/rocket_shot.wav');
+        this.load.audio('bgm_dreamy', 'assets/dreamybgm.mp3');
 
     }
 
@@ -49,7 +51,7 @@ class Menu extends Phaser.Scene {
             //easy mode
             game.settings = {
                 spaceshipSpeed: 3,
-                gameTimer: 60000
+                gameTimer: 10000
             }
             this.sound.play('sfx_select');
             this.scene.start('playScene');

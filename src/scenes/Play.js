@@ -3,6 +3,7 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+
     }
 
     preload() {
@@ -20,6 +21,8 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+
+        this.sound.play('bgm_dreamy');
 
         this.starfield = this.add.tileSprite(
             0,0,640,480, 'starfield'
@@ -112,6 +115,24 @@ class Play extends Phaser.Scene {
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
     
+        //intialize and display high score
+        this.highScore = 0;
+
+        let highScoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        this.showHighScore = this.add.text(borderUISize + borderPadding + 500 , borderUISize + borderPadding * 2, this.highScore, scoreConfig);
+        
         /*
         //initialize and display timer
         this.p1Timer = 0;
@@ -142,6 +163,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or <- for Menu',
             scoreConfig).setOrigin(0.5);
+            this.sound.stopAll();
             this.gameOver = true;
         }, null, this);
     
@@ -157,7 +179,7 @@ class Play extends Phaser.Scene {
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene");
+            this.scene.start("menuScene", this.highscore);
         }
 
         this.starfield.tilePositionX -= 4;
