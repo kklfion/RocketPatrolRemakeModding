@@ -219,7 +219,18 @@ class Play extends Phaser.Scene {
         this.p1Score += target.points;
         this.scoreLeft.text = this.p1Score;
 
-        this.sound.play('sfx_explosion');
+        //
+        var decideSound = Phaser.Math.Between(0, 3);
+        if(decideSound == 0){
+            this.sound.play('sfx_explosion_1');
+        } else if (decideSound == 1){
+            this.sound.play('sfx_explosion_2');
+        } else if (decideSound == 2){
+            this.sound.play('sfx_explosion_3');
+        } else {
+            this.sound.play('sfx_explosion_4');
+        }
+        
     }
 
 }
