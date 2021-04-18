@@ -1,8 +1,15 @@
 
 class Menu extends Phaser.Scene {
-    constructor(highscore) {
+    constructor() {
         super("menuScene");
-        this.highscore2 = highscore;
+    }
+
+    init(data) {  //grab data from previous scene
+        this.info = data;
+        if(this.info.highScoreTotal == null){
+            this.info.highScoreTotal = 0;
+        }
+        //console.log(`high score displaying from Menu: ${this.info.highScoreTotal}`)
     }
 
     preload() {
@@ -19,6 +26,29 @@ class Menu extends Phaser.Scene {
 
     create() {
         
+        //check if there is a previous high score, if not create an info object
+        if(this.info.highScoreTotal < 0){
+            this.info = {
+                highScoreTotal: 0
+            }
+        }
+
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        //show high score
+        this.showHighScore = this.add.text(borderUISize + borderPadding + 500 , borderUISize + borderPadding * 2, this.info.highScoreTotal, scoreConfig);
+
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -54,7 +84,7 @@ class Menu extends Phaser.Scene {
                 gameTimer: 10000
             }
             this.sound.play('sfx_select');
-            this.scene.start('playScene');
+            this.scene.start('playScene', this.info);
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             //hard mode
@@ -63,7 +93,7 @@ class Menu extends Phaser.Scene {
                 gameTimer: 45000
             }
             this.sound.play('sfx_select');
-            this.scene.start('playScene');
+            this.scene.start('playScene', this.info);
         }
     }
 

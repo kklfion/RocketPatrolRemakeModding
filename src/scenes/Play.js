@@ -3,7 +3,11 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+    }
 
+    init(data) {
+        this.info = data;
+        //console.log(`high score from Play init: ${this.info.highScoreTotal}`)
     }
 
     preload() {
@@ -115,23 +119,10 @@ class Play extends Phaser.Scene {
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
     
-        //intialize and display high score
-        this.highScore = 0;
-
-        let highScoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
-
-        this.showHighScore = this.add.text(borderUISize + borderPadding + 500 , borderUISize + borderPadding * 2, this.highScore, scoreConfig);
+        //display high score
+        this.showHighScore = this.add.text(borderUISize + borderPadding + 500 , borderUISize + borderPadding * 2, this.info.highScoreTotal, scoreConfig);
+        //console.log(`added ${this.info.highScoreTotal} as the new highScore`)
+        
         
         /*
         //initialize and display timer
@@ -171,15 +162,22 @@ class Play extends Phaser.Scene {
 
     update() {
 
-        //console.log(timer.getElapsedSeconds());
+        //update highscore when game over
+        if (this.gameOver) {
+            if(this.p1Score > this.info.highScoreTotal) {
+                this.info.highScoreTotal = this.p1Score;
+            }
+            this.showHighScore.text = this.info.highScoreTotal;
+            //console.log(this.highScore);
+        }
 
         //check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.scene.restart();
+            this.scene.restart(this.info);
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene", this.highscore);
+            this.scene.start("menuScene", this.info);
         }
 
         this.starfield.tilePositionX -= 4;
