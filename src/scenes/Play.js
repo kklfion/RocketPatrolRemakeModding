@@ -11,10 +11,15 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('starfield', 'assets/starfield.png');
+        this.load.image('starfield', 'assets/background.png');
+        this.load.image('scroll4', 'assets/scroll4.png');
+        this.load.image('scroll3', 'assets/scroll3.png');
+        this.load.image('scroll2', 'assets/scroll2.png');
+        this.load.image('scroll1', 'assets/scroll1.png');
         this.load.image('rocket', 'assets/rocket.png');
         this.load.image('spaceship', 'assets/spaceship.png');
         this.load.image('bonusTarget', 'assets/bonus1.png');
+        this.load.image('frame', 'assets/frame.png');
         
         //load spritesheet
         this.load.spritesheet(
@@ -28,8 +33,25 @@ class Play extends Phaser.Scene {
 
         this.sound.play('bgm_dreamy');
 
+        //parallax scrolling
         this.starfield = this.add.tileSprite(
             0,0,640,480, 'starfield'
+        ).setOrigin(0,0);
+        
+        this.scroll4 = this.add.tileSprite(
+            0,0,640,480, 'scroll4'
+        ).setOrigin(0,0);
+
+        this.scroll3 = this.add.tileSprite(
+            0,0,640,480, 'scroll3'
+        ).setOrigin(0,0);
+
+        this.scroll2 = this.add.tileSprite(
+            0,0,640,480, 'scroll2'
+        ).setOrigin(0,0);
+
+        this.scroll1 = this.add.tileSprite(
+            0,0,640,480, 'scroll1'
         ).setOrigin(0,0);
 
         this.p1Rocket = new Rocket(
@@ -75,18 +97,20 @@ class Play extends Phaser.Scene {
             10
         ).setOrigin(0, 0);
 
+        /*
         // green UI background
         this.add.rectangle(0, 
             borderUISize + borderPadding, 
             game.config.width, borderUISize*2,
             0x00FF00,
             ).setOrigin(0.0);
+        */
 
-        // white borders
-    	this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0 ,0);
-	    this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0 ,0);
-	    this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-	    this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
+        // invisible borders
+    	this.add.rectangle(0, 0, game.config.width, borderUISize).setOrigin(0 ,0); //top
+	    this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize).setOrigin(0 ,0); //bottom
+	    this.add.rectangle(0, 0, borderUISize, game.config.height).setOrigin(0 ,0); //left
+	    this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height).setOrigin(0 ,0); //right
     
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -102,6 +126,11 @@ class Play extends Phaser.Scene {
       
         //initialize score
         this.p1Score = 0;
+
+        //display frame
+        this.frame = this.add.tileSprite(
+            0,0,640,480, 'frame'
+        ).setOrigin(0,0);
 
         //display score
         let scoreConfig = {
@@ -180,7 +209,12 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene", this.info);
         }
 
-        this.starfield.tilePositionX -= 4;
+        //scrolling background
+        this.starfield.tilePositionX -= 2;
+        this.scroll4.tilePositionX -= 2.2;
+        this.scroll3.tilePositionX -= 2.6;
+        this.scroll2.tilePositionX -= 3;
+        this.scroll1.tilePositionX -= 3.2;
 
         if (!this.gameOver) {
             this.p1Rocket.update();
