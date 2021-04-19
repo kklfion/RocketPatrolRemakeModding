@@ -16,9 +16,9 @@ class Play extends Phaser.Scene {
         this.load.image('scroll3', 'assets/scroll3.png');
         this.load.image('scroll2', 'assets/scroll2.png');
         this.load.image('scroll1', 'assets/scroll1.png');
-        this.load.image('rocket', 'assets/rocket.png');
-        this.load.image('spaceship', 'assets/spaceship.png');
-        this.load.image('bonusTarget', 'assets/bonus1.png');
+        this.load.image('rocket', 'assets/paw.png');
+        this.load.image('spaceship', 'assets/plane.png');
+        this.load.image('bonusTarget', 'assets/witch.png');
         this.load.image('frame', 'assets/frame.png');
         
         //load spritesheet
@@ -63,8 +63,8 @@ class Play extends Phaser.Scene {
 
         this.bonusTarget = new BonusTarget (
             this,
-            game.config.width + borderUISize * 9,
-            borderUISize * 4,
+            game.config.width + borderUISize * 9 + 100,
+            borderUISize * 3,
             'bonusTarget',
             0,
             40
@@ -127,7 +127,7 @@ class Play extends Phaser.Scene {
         //initialize score
         this.p1Score = 0;
 
-        //display frame
+        //display game frame
         this.frame = this.add.tileSprite(
             0,0,640,480, 'frame'
         ).setOrigin(0,0);
@@ -136,14 +136,16 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
+            backgroundColor: '#2B2929',
+            color: '#F8ECEC',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
+                left: 5,
+                right: 5
             },
-            fixedWidth: 100
+            fixedWidth: 50
         }
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
