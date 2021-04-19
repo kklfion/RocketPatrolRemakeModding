@@ -21,12 +21,19 @@ class Play extends Phaser.Scene {
         this.load.image('bonusTarget', 'assets/witch.png');
         this.load.image('frame', 'assets/frame.png');
         
-        //load spritesheet
+        //load spritesheets
         this.load.spritesheet(
             'explosion', 
-            'assets/explosion.png', 
-            {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9}
+            'assets/plane_explosion.png', 
+            {frameWidth: 70, frameHeight: 38, startFrame: 0, endFrame: 9}
         );
+            
+        this.load.spritesheet(
+            'witch_explosion', 
+            'assets/witch_explosion.png', 
+            {frameWidth: 58, frameHeight: 31, startFrame: 0, endFrame: 12}
+        );
+        
     }
 
     create() {
@@ -117,10 +124,16 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
       
-        //animation config
+        //explosion animation config
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 9, first: 0}),
+            frameRate: 30
+        });
+
+        this.anims.create({
+            key: 'witch_explode',
+            frames: this.anims.generateFrameNumbers('witch_explosion', {start: 0, end: 12, first: 0}),
             frameRate: 30
         });
       
@@ -145,7 +158,7 @@ class Play extends Phaser.Scene {
                 left: 5,
                 right: 5
             },
-            fixedWidth: 50
+            fixedWidth: 0
         }
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
@@ -245,7 +258,7 @@ class Play extends Phaser.Scene {
 
         if(this.checkCollision(this.p1Rocket, this.bonusTarget)){
             this.p1Rocket.reset();
-            this.targetExplode(this.bonusTarget);
+            this.witchDisappear(this.bonusTarget);
         }
     }
 
@@ -270,7 +283,7 @@ class Play extends Phaser.Scene {
             target.reset();
             target.alpha = 1;
             boom.destroy();
-        });
+        });        
         //score add and repaint
         this.p1Score += target.points;
         this.scoreLeft.text = this.p1Score;
@@ -289,4 +302,29 @@ class Play extends Phaser.Scene {
         
     }
 
+    witchDisappear(witch) {
+        witch.alpha = 0;
+        let witchBoom = this.add.sprite(witch.x, witch.y, 'witch_explosion').setOrigin(0, 0);
+        witchBoom.anims.play('witch_explode');
+        witchBoom.on('animationcomplete', () => {
+            witch.reset();
+            witch.alpha = 1;
+            witchBoom.destroy();
+        });
+
+        this.p1Score += witch.points;
+        this.scoreLeft.text = this.p1Score;
+
+        //
+        var decideSound = Phaser.Math.Between(0, 3);
+        if(decideSound == 0){
+            this.sound.play('sfx_explosion_1');
+        } else if (decideSound == 1){
+            this.sound.play('sfx_explosion_2');
+        } else if (decideSound == 2){
+            this.sound.play('sfx_explosion_3');
+        } else {
+            this.sound.play('sfx_explosion_4');
+        }
+    }
 }
