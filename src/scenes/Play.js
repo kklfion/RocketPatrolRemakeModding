@@ -20,6 +20,9 @@ class Play extends Phaser.Scene {
         this.load.image('spaceship', 'assets/plane.png');
         this.load.image('bonusTarget', 'assets/witch.png');
         this.load.image('frame', 'assets/frame.png');
+        this.load.image('score', 'assets/scoreBox.png');
+        this.load.image('highScore2', 'assets/highScoreBox2.png');
+        this.load.image('gameOver', 'assets/gameOver.png');
         
         //load spritesheets
         this.load.spritesheet(
@@ -144,60 +147,39 @@ class Play extends Phaser.Scene {
         this.frame = this.add.tileSprite(
             0,0,640,480, 'frame'
         ).setOrigin(0,0);
+        
+        //display score boxes
+        this.add.image(9, 13, 'score').setOrigin(0,0);
+        this.add.image(510, 13, 'highScore2').setOrigin(0,0);
 
         //display score
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#2B2929',
-            color: '#F8ECEC',
+            fontFamily: 'Georgia',
+            fontSize: '25px',
             align: 'center',
             padding: {
                 top: 5,
-                bottom: 5,
-                left: 5,
-                right: 5
+                bottom: 5
             },
             fixedWidth: 0
         }
 
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+        this.scoreLeft = this.add.text(22, 24, this.p1Score, scoreConfig);
     
         //display high score
-        this.showHighScore = this.add.text(borderUISize + borderPadding + 500 , borderUISize + borderPadding * 2, this.info.highScoreTotal, scoreConfig);
+        this.showHighScore = this.add.text(595, 24, this.info.highScoreTotal, scoreConfig);
         //console.log(`added ${this.info.highScoreTotal} as the new highScore`)
         
         
-        /*
-        //initialize and display timer
-        this.p1Timer = 0;
-
-        let p1TimerConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
-
-        this.timeLeft = this.add.text(borderUISize + borderPadding + 200, borderUISize + borderPadding * 2, this.p1Timer, p1TimerConfig);
-
-        */
-
         //GAME OVER flag
         this.gameOver = false;
 
         //60-second play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or <- for Menu',
-            scoreConfig).setOrigin(0.5);
+            //this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            //this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);
+            this.add.image(game.config.width / 2, game.config.height / 2, 'gameOver');
             this.sound.stopAll();
             this.gameOver = true;
         }, null, this);
