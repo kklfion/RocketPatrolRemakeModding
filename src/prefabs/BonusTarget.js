@@ -14,7 +14,7 @@ class BonusTarget extends Phaser.GameObjects.Sprite {
             this.reset();
         }
     }
-  
+    
     //resets the position of the ship
     reset() {
         this.x = game.config.width;
